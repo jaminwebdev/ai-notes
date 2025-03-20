@@ -5,7 +5,7 @@ import { Button } from './ui/button';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-// import { logOutAction } from '@/actions/users';
+import { logOutAction } from '@/actions/users';
 
 function LogOutButton() {
   const router = useRouter();
@@ -16,9 +16,7 @@ function LogOutButton() {
     setLoading(true);
 
     try {
-      // const { errorMessage } = await logOutAction();
-
-      const errorMessage = 'Whoopsies';
+      const { errorMessage } = await logOutAction();
 
       if (errorMessage) throw new Error(errorMessage);
 
