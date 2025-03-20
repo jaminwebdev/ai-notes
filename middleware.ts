@@ -16,7 +16,87 @@ export async function updateSession(request: NextRequest) {
     request,
   });
 
-  const supabase = createServerClient(
+  const supabase = createSupabaseClient(request, supabaseResponse);
+
+  const isAuthRoute =
+    request.nextUrl.pathname === '/login' ||
+    request.nextUrl.pathname === '/sign-up';
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (isAuthRoute && user) {
+    return redirectToHome();
+  }
+
+  if (!isAuthRoute && !user) {
+    return redirectToLogin();
+  }
+
+  const { searchParams, pathname } = new URL(request.url);
+
+  if (pathname === '/' && !searchParams.get('noteId')) {
+    return handleNoteRedirection(user, supabase, request);
+  }
+
+  return supabaseResponse;
+}
+
+function redirectToHome() {
+  return NextResponse.redirect(new URL('/', process.env.NEXT_PUBLIC_BASE_URL));
+}
+
+function redirectToLogin() {
+  return NextResponse.redirect(
+    new URL('/login', process.env.NEXT_PUBLIC_BASE_URL)
+  );
+}
+
+async function handleNoteRedirection(
+  user: any,
+  supabase: any,
+  request: NextRequest
+) {
+  if (!user) return NextResponse.next();
+
+  const { data: notes } = await supabase
+    .from('ai_notes_notes')
+    .select('id')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(1);
+
+  if (notes && notes.length > 0) {
+    return redirectToNoteId(request, notes[0]?.id);
+  }
+
+  const { data } = await supabase
+    .from('ai_notes_notes')
+    .insert([{ user_id: user.id, text: '' }])
+    .select();
+
+  if (data && data.length > 0) {
+    return redirectToNoteId(request, data[0]?.id);
+  }
+
+  return NextResponse.json(
+    { error: 'Failed to create a new note.' },
+    { status: 500 }
+  );
+}
+
+function redirectToNoteId(request: NextRequest, noteId: any) {
+  const url = request.nextUrl.clone();
+  url.searchParams.set('noteId', noteId);
+  return NextResponse.redirect(url);
+}
+
+const createSupabaseClient = (
+  request: NextRequest,
+  supabaseResponse: NextResponse
+) => {
+  return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -38,59 +118,4 @@ export async function updateSession(request: NextRequest) {
       },
     }
   );
-
-  const isAuthRoute =
-    request.nextUrl.pathname === '/login' ||
-    request.nextUrl.pathname === '/sign-up';
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (isAuthRoute && user) {
-    return NextResponse.redirect(
-      new URL('/', process.env.NEXT_PUBLIC_BASE_URL)
-    );
-  }
-
-  if (!isAuthRoute && !user) {
-    return NextResponse.redirect(
-      new URL('/login', process.env.NEXT_PUBLIC_BASE_URL)
-    );
-  }
-
-  // const { searchParams, pathname } = new URL(request.url);
-
-  // if (!searchParams.get('noteId') && pathname === '/') {
-  //   const {
-  //     data: { user },
-  //   } = await supabase.auth.getUser();
-
-  //   if (user) {
-  //     const { newestNoteId } = await fetch(
-  //       `${process.env.NEXT_PUBLIC_BASE_URL}/api/fetch-newest-note?userId=${user.id}`
-  //     ).then(res => res.json());
-
-  //     if (newestNoteId) {
-  //       const url = request.nextUrl.clone();
-  //       url.searchParams.set('noteId', newestNoteId);
-  //       return NextResponse.redirect(url);
-  //     } else {
-  //       const { noteId } = await fetch(
-  //         `${process.env.NEXT_PUBLIC_BASE_URL}/api/create-new-note?userId=${user.id}`,
-  //         {
-  //           method: 'POST',
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //           },
-  //         }
-  //       ).then(res => res.json());
-  //       const url = request.nextUrl.clone();
-  //       url.searchParams.set('noteId', noteId);
-  //       return NextResponse.redirect(url);
-  //     }
-  //   }
-  // }
-
-  return supabaseResponse;
-}
+};
