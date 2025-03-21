@@ -1,4 +1,4 @@
-import { getUser } from '@/auth/server';
+import { getUser, createClient } from '@/supabase/server';
 import {
   Sidebar,
   SidebarContent,
@@ -8,7 +8,6 @@ import {
 import Link from 'next/link';
 import SidebarGroupContent from './SidebarGroupContent';
 import { type Note } from '@/types/types';
-import { createClient } from '@/auth/server';
 
 export async function AppSidebar() {
   const user = await getUser();
