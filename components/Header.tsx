@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Button } from './ui/button';
 import DarkModeToggle from './DarkModeToggle';
 import LogOutButton from './LogOutButton';
-import { getUser } from '@/auth/server';
+import { getUser } from '@/supabase/server';
 
 async function Header() {
   const user = await getUser();
