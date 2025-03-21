@@ -34,12 +34,6 @@ export async function updateSession(request: NextRequest) {
     return redirectToLogin();
   }
 
-  const { searchParams, pathname } = new URL(request.url);
-
-  if (pathname === '/' && !searchParams.get('noteId')) {
-    return handleNoteRedirection(user, supabase, request);
-  }
-
   return supabaseResponse;
 }
 
@@ -51,45 +45,6 @@ function redirectToLogin() {
   return NextResponse.redirect(
     new URL('/login', process.env.NEXT_PUBLIC_BASE_URL)
   );
-}
-
-async function handleNoteRedirection(
-  user: any,
-  supabase: any,
-  request: NextRequest
-) {
-  if (!user) return NextResponse.next();
-
-  const { data: notes } = await supabase
-    .from('ai_notes_notes')
-    .select('id')
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
-    .limit(1);
-
-  if (notes && notes.length > 0) {
-    return redirectToNoteId(request, notes[0]?.id);
-  }
-
-  const { data } = await supabase
-    .from('ai_notes_notes')
-    .insert([{ user_id: user.id, text: '' }])
-    .select();
-
-  if (data && data.length > 0) {
-    return redirectToNoteId(request, data[0]?.id);
-  }
-
-  return NextResponse.json(
-    { error: 'Failed to create a new note.' },
-    { status: 500 }
-  );
-}
-
-function redirectToNoteId(request: NextRequest, noteId: any) {
-  const url = request.nextUrl.clone();
-  url.searchParams.set('noteId', noteId);
-  return NextResponse.redirect(url);
 }
 
 const createSupabaseClient = (
