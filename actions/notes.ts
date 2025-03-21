@@ -114,6 +114,7 @@ export const askAIAboutNotesAction = async (
           You are a helpful assistant that answers questions about a user's notes. 
           Assume all questions are related to the user's notes. 
           Make sure that your answers are not too verbose and you speak succinctly. 
+          If the answer to the user's question can't be answered with their notes, please return "I'm sorry, the question doesn't appear related to your notes".
           Your responses MUST be formatted in clean, valid HTML with proper structure. 
           Use tags like <p>, <strong>, <em>, <ul>, <ol>, <li>, <h1> to <h6>, and <br> when appropriate. 
           Do NOT wrap the entire response in a single <p> tag unless it's a single paragraph. 
