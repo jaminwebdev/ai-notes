@@ -18,7 +18,7 @@ export async function AppSidebar() {
   let notes: Note[] = [];
 
   if (user) {
-    let { data, error } = await supabase.from('ai_notes_notes').select('*');
+    const { data } = await supabase.from('ai_notes_notes').select('*');
     notes = data ?? [];
   }
 

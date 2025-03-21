@@ -12,6 +12,8 @@ import Link from 'next/link';
 import { format } from 'date-fns';
 import DeleteNoteButton from './DeleteNoteButton';
 import { useGetAllNotes } from '@/hooks/notehooks';
+import { toast } from 'sonner';
+import { useEffect } from 'react';
 
 type Props = {
   notes: Note[];
@@ -20,6 +22,14 @@ type Props = {
 function NoteList({ notes }: Props) {
   const { data: fetchedNotes, error: fetchedNotesError } =
     useGetAllNotes(notes);
+
+  useEffect(() => {
+    if (fetchedNotesError) {
+      toast('Logged in', {
+        description: `${fetchedNotesError}`,
+      });
+    }
+  }, [fetchedNotesError]);
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

@@ -11,7 +11,7 @@ export default async function NotePage({ params }: Props) {
 
   const supabase = await createClient();
 
-  let { data: note, error } = await supabase
+  const { data: note, error } = await supabase
     .from('ai_notes_notes')
     .select('*')
     .eq('id', id)

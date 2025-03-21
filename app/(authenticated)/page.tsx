@@ -9,7 +9,7 @@ export default async function Home() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  let { data: notes, error } = await supabase
+  const { data: notes, error } = await supabase
     .from('ai_notes_notes')
     .select('*')
     .eq('user_id', user?.id)

@@ -7,12 +7,13 @@ import {
 } from '@/components/ui/sidebar';
 import { SearchIcon } from 'lucide-react';
 import { Input } from './ui/input';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Fuse from 'fuse.js';
 import SelectNoteButton from './SelectNoteButton';
 import DeleteNoteButton from './DeleteNoteButton';
 import { type Note } from '@/types/types';
 import { useGetAllNotes } from '@/hooks/notehooks';
+import { toast } from 'sonner';
 
 type Props = {
   notes: Note[];
@@ -23,6 +24,14 @@ function SidebarGroupContent({ notes }: Props) {
 
   const { data: fetchedNotes, error: fetchedNotesError } =
     useGetAllNotes(notes);
+
+  useEffect(() => {
+    if (fetchedNotesError) {
+      toast('Logged in', {
+        description: `${fetchedNotesError}`,
+      });
+    }
+  }, [fetchedNotesError]);
 
   const fuse = useMemo(() => {
     return new Fuse(fetchedNotes, {
