@@ -1,45 +1,56 @@
 'use server';
 
-import { getUser, createClient } from '@/auth/server';
+import { getUser, createClient } from '@/supabase/server';
 import { handleError } from '@/lib/utils';
 import openai from '@/openai';
 import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
 
-export const createNoteAction = async (noteId: string) => {
+export const createNoteAction = async (title: string, body: string) => {
   try {
     const user = await getUser();
     if (!user) throw new Error('You must be logged in to create a note');
 
     const supabase = await createClient();
 
-    const { error } = await supabase
-      .from('ai_notes_user')
-      .insert([{ id: noteId, user_id: user.id, text: '' }]);
+    const { data, error } = await supabase
+      .from('ai_notes_notes')
+      .insert([
+        {
+          title,
+          body,
+        },
+      ])
+      .select();
 
     if (error) throw error;
 
-    return { errorMessage: null };
+    return { data, errorMessage: null };
   } catch (error) {
     return handleError(error);
   }
 };
 
-export const updateNoteAction = async (noteId: string, text: string) => {
+export const updateNoteAction = async (
+  noteId: string,
+  title: string,
+  body: string
+) => {
   try {
-    const user = await getUser();
-    if (!user) throw new Error('You must be logged in to update a note');
-
     const supabase = await createClient();
 
-    const { error } = await supabase
-      .from('ai_notes_user')
-      .update({ text: text })
+    const { data, error } = await supabase
+      .from('ai_notes_notes')
+      .update({
+        title,
+        body,
+        updated_at: new Date().toISOString(),
+      })
       .eq('id', noteId)
       .select();
 
     if (error) throw error;
 
-    return { errorMessage: null };
+    return { data, errorMessage: null };
   } catch (error) {
     return handleError(error);
   }
