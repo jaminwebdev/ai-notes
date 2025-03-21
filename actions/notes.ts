@@ -89,8 +89,8 @@ export const askAIAboutNotesAction = async (
     .map(note =>
       `
       Text: ${note.text}
-      Created at: ${note.createdAt}
-      Last updated: ${note.updatedAt}
+      Created at: ${note.created_at}
+      Last updated: ${note.updated_at}
       `.trim()
     )
     .join('\n');

@@ -2,13 +2,13 @@ export type Note = {
   id: string;
   text: string;
   user_id: string;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: string;
+  updated_at: string;
 };
 
 export type User = {
   id: string;
   email: string;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: string;
+  updated_at: string;
 };

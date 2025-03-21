@@ -51,7 +51,7 @@ function SelectNoteButton({ note }: Props) {
           {noteText}
         </p>
         <p className="text-muted-foreground text-xs">
-          {note.updatedAt.toLocaleDateString()}
+          {new Date(note.updated_at).toLocaleString()}
         </p>
       </Link>
     </SidebarMenuButton>
