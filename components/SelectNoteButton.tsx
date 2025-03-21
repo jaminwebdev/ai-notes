@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation';
 import { SidebarMenuButton } from './ui/sidebar';
 import Link from 'next/link';
+import { format } from 'date-fns';
 
 import { type Note } from '@/types/types';
 
@@ -17,7 +18,7 @@ function SelectNoteButton({ note }: Props) {
     <SidebarMenuButton
       asChild
       className={`items-start gap-0 pr-12 ${
-        note.id === id && 'bg-sidebar-accent/50'
+        id && note.id === id && 'bg-sidebar-accent/50'
       }`}
     >
       <Link href={`/notes/${note.id}`} className="flex h-fit flex-col">
@@ -25,7 +26,7 @@ function SelectNoteButton({ note }: Props) {
           {note.title}
         </p>
         <p className="text-muted-foreground text-xs">
-          {new Date(note.updated_at).toLocaleString()}
+          {format(new Date(note.updated_at), 'MM/dd/yyyy')}
         </p>
       </Link>
     </SidebarMenuButton>
