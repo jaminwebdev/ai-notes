@@ -34,12 +34,24 @@ function AuthForm({ type }: Props) {
         errorMessage = (await signUpAction(email, password)).errorMessage;
       }
 
-      if (!errorMessage) {
-        router.replace(`/?toastType=${type}`);
-      } else {
+      if (errorMessage) {
         toast('Error', {
           description: errorMessage,
         });
+      }
+
+      if (!errorMessage && !isLoginForm) {
+        toast('Welcome! 🎉', {
+          description: 'Please verify your email to log in 🙏',
+        });
+        router.push('/');
+      }
+
+      if (!errorMessage && isLoginForm) {
+        toast('Logged in', {
+          description: 'You have been successfully logged in',
+        });
+        router.push('/');
       }
     });
   };
