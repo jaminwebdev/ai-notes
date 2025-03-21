@@ -4,42 +4,50 @@ import { User } from '@supabase/supabase-js';
 import { Button } from './ui/button';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { v4 as uuidv4 } from 'uuid';
-import { createNoteAction } from '@/actions/notes';
+import { useCreateNote } from '@/hooks/notehooks';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import NoteForm from './NoteForm';
 
 type Props = {
   user: User | null;
 };
 
 function NewNoteButton({ user }: Props) {
-  const router = useRouter();
-
-  const [loading, setLoading] = useState(false);
-
-  const handleClickNewNoteButton = async () => {
-    if (!user) {
-      router.push('/login');
-    } else {
-      setLoading(true);
-
-      const uuid = uuidv4();
-      await createNoteAction(uuid);
-      router.push(`/?noteId=${uuid}&toastType=newNote`);
-
-      setLoading(false);
-    }
-  };
+  const [open, setOpen] = useState(false);
+  const createNote = useCreateNote();
 
   return (
-    <Button
-      onClick={handleClickNewNoteButton}
-      variant="secondary"
-      className="w-24"
-      disabled={loading}
-    >
-      {loading ? <Loader2 className="animate-spin" /> : 'New Note'}
-    </Button>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button
+          variant="secondary"
+          className="w-24"
+          disabled={createNote.isPending}
+        >
+          {createNote.isPending ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            'New Note'
+          )}
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Create New Note</DialogTitle>
+          <DialogDescription>
+            Add a new note to your collection.
+          </DialogDescription>
+        </DialogHeader>
+        <NoteForm onSuccess={() => setOpen(false)} />
+      </DialogContent>
+    </Dialog>
   );
 }
 

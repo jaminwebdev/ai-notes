@@ -13,43 +13,42 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from './ui/button';
 import { Loader2, Trash2 } from 'lucide-react';
-import { useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
-import { deleteNoteAction } from '@/actions/notes';
+import { useDeleteNote } from '@/hooks/notehooks';
 
 type Props = {
   noteId: string;
-  deleteNoteLocally: (noteId: string) => void;
 };
 
-function DeleteNoteButton({ noteId, deleteNoteLocally }: Props) {
+function DeleteNoteButton({ noteId }: Props) {
   const router = useRouter();
   const noteIdParam = useSearchParams().get('noteId') || '';
+  const deleteNote = useDeleteNote();
 
-  const [isPending, startTransition] = useTransition();
+  const handleDeleteNote = async () => {
+    try {
+      const result = await deleteNote.mutateAsync(noteId);
 
-  const handleDeleteNote = () => {
-    startTransition(async () => {
-      const { errorMessage } = await deleteNoteAction(noteId);
-
-      if (!errorMessage) {
-        toast('Note Deleted', {
-          description: 'You have successfully deleted the note',
-        });
-
-        deleteNoteLocally(noteId);
-
-        if (noteId === noteIdParam) {
-          router.replace('/');
-        }
-      } else {
-        toast('Error', {
-          description: errorMessage,
-        });
+      if (result.errorMessage) {
+        throw new Error(result.errorMessage);
       }
-    });
+
+      toast('Note Deleted', {
+        description: 'You have successfully deleted the note',
+      });
+
+      if (noteId === noteIdParam) {
+        router.replace('/');
+      }
+    } catch (error) {
+      toast('Error', {
+        description:
+          error instanceof Error ? error.message : 'Failed to delete note',
+      });
+    }
   };
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -75,8 +74,13 @@ function DeleteNoteButton({ noteId, deleteNoteLocally }: Props) {
           <AlertDialogAction
             onClick={handleDeleteNote}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90 w-24"
+            disabled={deleteNote.isPending}
           >
-            {isPending ? <Loader2 className="animate-spin" /> : 'Delete'}
+            {deleteNote.isPending ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              'Delete'
+            )}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

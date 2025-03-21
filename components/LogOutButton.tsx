@@ -20,7 +20,11 @@ function LogOutButton() {
 
       if (errorMessage) throw new Error(errorMessage);
 
-      router.push(`/?toastType=logOut`);
+      router.push('/login');
+
+      toast('Logged out', {
+        description: 'You have been successfully logged out',
+      });
     } catch (e) {
       toast('Error 🙀', {
         description: e instanceof Error ? e.message : String(e),
