@@ -15,22 +15,14 @@ import {
 } from '@/components/ui/dialog';
 import NoteForm from './NoteForm';
 
-type Props = {
-  user: User | null;
-};
-
-function NewNoteButton({ user }: Props) {
+function NewNoteButton() {
   const [open, setOpen] = useState(false);
   const createNote = useCreateNote();
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="secondary"
-          className="w-24"
-          disabled={createNote.isPending}
-        >
+        <Button variant="secondary" disabled={createNote.isPending}>
           {createNote.isPending ? (
             <Loader2 className="animate-spin" />
           ) : (

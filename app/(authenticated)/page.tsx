@@ -23,7 +23,7 @@ export default async function Home() {
     <div className="container mx-auto py-8">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold">My Notes</h1>
-        <NewNoteButton user={user} />
+        <NewNoteButton />
       </div>
       <NoteList notes={notes as Note[]} />
     </div>

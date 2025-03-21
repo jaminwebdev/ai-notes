@@ -11,19 +11,12 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Fragment, useRef, useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
 import { Textarea } from './ui/textarea';
 import { ArrowUpIcon } from 'lucide-react';
 import { askAIAboutNotesAction } from '@/actions/notes';
 import '@/styles/ai-response.css';
 
-type Props = {
-  user: User | null;
-};
-
-function AskAIButton({ user }: Props) {
-  const router = useRouter();
-
+function AskAIButton() {
   const [isPending, startTransition] = useTransition();
 
   const [open, setOpen] = useState(false);
@@ -32,16 +25,12 @@ function AskAIButton({ user }: Props) {
   const [responses, setResponses] = useState<string[]>([]);
 
   const handleOnOpenChange = (isOpen: boolean) => {
-    if (!user) {
-      router.push('/login');
-    } else {
-      if (isOpen) {
-        setQuestionText('');
-        setQuestions([]);
-        setResponses([]);
-      }
-      setOpen(isOpen);
+    if (isOpen) {
+      setQuestionText('');
+      setQuestions([]);
+      setResponses([]);
     }
+    setOpen(isOpen);
   };
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -92,7 +81,7 @@ function AskAIButton({ user }: Props) {
   return (
     <Dialog open={open} onOpenChange={handleOnOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="secondary">Ask AI</Button>
+        <Button variant="default">Ask AI</Button>
       </DialogTrigger>
       <DialogContent
         className="custom-scrollbar flex h-[85vh] max-w-4xl flex-col overflow-y-auto"

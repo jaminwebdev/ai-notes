@@ -8,6 +8,8 @@ import {
 import Link from 'next/link';
 import SidebarGroupContent from './SidebarGroupContent';
 import { type Note } from '@/types/types';
+import AskAIButton from './AskAIButton';
+import NewNoteButton from './NewNoteButton';
 
 export async function AppSidebar() {
   const user = await getUser();
@@ -22,11 +24,11 @@ export async function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarContent className="custom-scrollbar">
+      <SidebarContent className="custom-scrollbar flex justify-between">
         <SidebarGroup>
           <SidebarGroupLabel className="mb-2 mt-2 text-lg">
             {user ? (
-              'Your Notes'
+              'Your Notes 📝'
             ) : (
               <p>
                 <Link href="/login" className="underline">
@@ -37,6 +39,10 @@ export async function AppSidebar() {
             )}
           </SidebarGroupLabel>
           {user && <SidebarGroupContent notes={notes} />}
+        </SidebarGroup>
+        <SidebarGroup className="flex gap-4">
+          <NewNoteButton />
+          <AskAIButton />
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
