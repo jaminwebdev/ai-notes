@@ -64,7 +64,7 @@ export const deleteNoteAction = async (noteId: string) => {
     const supabase = await createClient();
 
     const { error } = await supabase
-      .from('ai_notes_user')
+      .from('ai_notes_notes')
       .delete()
       .eq('id', noteId);
 
@@ -86,7 +86,7 @@ export const askAIAboutNotesAction = async (
   const supabase = await createClient();
 
   const { data: notes, error } = await supabase
-    .from('ai_notes_user')
+    .from('ai_notes_notes')
     .select('*')
     .order('created_at', { ascending: true });
 
@@ -99,7 +99,8 @@ export const askAIAboutNotesAction = async (
   const formattedNotes = notes
     .map(note =>
       `
-      Text: ${note.text}
+      Title: ${note.title}
+      Body: ${note.body}
       Created at: ${note.created_at}
       Last updated: ${note.updated_at}
       `.trim()
