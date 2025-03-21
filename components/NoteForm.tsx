@@ -111,13 +111,13 @@ function NoteForm({ note, onSuccess }: Props) {
               value={body}
               onChange={e => setBody(e.target.value)}
               placeholder="Enter your note content..."
-              className="min-h-[200px] max-h-[300px]"
+              className="min-h-[200px] max-h-[50vh] md:max-h-[300px]"
               required
             />
           </TabsContent>
           <TabsContent
             value="preview"
-            className="min-h-[200px] max-h-[300px] overflow-y-auto rounded-md border p-4 prose prose-sm dark:prose-invert max-w-none"
+            className="min-h-[200px] max-h-[50vh] md:max-h-[300px] overflow-y-auto rounded-md border p-4 prose prose-sm dark:prose-invert max-w-none"
           >
             <ReactMarkdown
               components={{
