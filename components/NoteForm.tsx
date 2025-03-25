@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import { useCreateNote, useUpdateNote } from '@/hooks/notehooks';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ReactMarkdown from 'react-markdown';
-import { Note } from '@/types/types';
+import { Note } from '@/lib/types';
 
 type Props = {
   note?: Note;

@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Note } from '@/types/types';
+import { Note } from '@/lib/types';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import DeleteNoteButton from './DeleteNoteButton';

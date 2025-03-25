@@ -11,7 +11,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Fuse from 'fuse.js';
 import SelectNoteButton from './SelectNoteButton';
 import DeleteNoteButton from './DeleteNoteButton';
-import { type Note } from '@/types/types';
+import { type Note } from '@/lib/types';
 import { useGetAllNotes } from '@/hooks/notehooks';
 import { toast } from 'sonner';
 

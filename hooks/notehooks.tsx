@@ -4,7 +4,7 @@ import {
   updateNoteAction,
   deleteNoteAction,
 } from '@/actions/notes';
-import { Note } from '@/types/types';
+import { Note } from '@/lib/types';
 import { createClient } from '@/supabase/client';
 
 type CreateNoteInput = {

@@ -1,7 +1,7 @@
 import { createClient } from '@/supabase/server';
 import NewNoteButton from '@/components/NewNoteButton';
 import NoteList from '@/components/NoteList';
-import { Note } from '@/types/types';
+import { Note } from '@/lib/types';
 import AskAIButton from '@/components/AskAIButton';
 
 export default async function Home() {

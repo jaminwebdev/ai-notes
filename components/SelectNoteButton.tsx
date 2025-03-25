@@ -5,7 +5,7 @@ import { SidebarMenuButton } from './ui/sidebar';
 import Link from 'next/link';
 import { format } from 'date-fns';
 
-import { type Note } from '@/types/types';
+import { type Note } from '@/lib/types';
 
 type Props = {
   note: Note;

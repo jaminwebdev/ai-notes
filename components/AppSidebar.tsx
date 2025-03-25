@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import SidebarGroupContent from './SidebarGroupContent';
-import { type Note } from '@/types/types';
+import { type Note } from '@/lib/types';
 import AskAIButton from './AskAIButton';
 import NewNoteButton from './NewNoteButton';
 

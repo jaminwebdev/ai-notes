@@ -1,6 +1,6 @@
 import { createClient } from '@/supabase/server';
 import NoteForm from '@/components/NoteForm';
-import { Note } from '@/types/types';
+import { Note } from '@/lib/types';
 
 type Props = {
   params: Promise<{ id: string }>;
