@@ -40,7 +40,9 @@ export const signUpAction = async (email: string, password: string) => {
       email,
       password,
       options: {
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}}/login`,
+        data: {
+          actual_url: `${process.env.NEXT_PUBLIC_BASE_URL}}`,
+        },
       },
     });
     if (error) throw error;
