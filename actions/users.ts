@@ -39,6 +39,9 @@ export const signUpAction = async (email: string, password: string) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}}/login?verify=true`,
+      },
     });
     if (error) throw error;
 
