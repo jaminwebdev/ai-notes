@@ -41,7 +41,7 @@ export const signUpAction = async (email: string, password: string) => {
       password,
       options: {
         data: {
-          actual_url: `${process.env.NEXT_PUBLIC_BASE_URL}}`,
+          actual_url: `${process.env.NEXT_PUBLIC_BASE_URL}`,
         },
       },
     });
