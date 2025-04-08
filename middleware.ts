@@ -22,6 +22,8 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname === '/login' ||
     request.nextUrl.pathname === '/sign-up';
 
+  const isVerificationRoute = request.nextUrl.pathname === '/api/confirm';
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -30,7 +32,7 @@ export async function updateSession(request: NextRequest) {
     return redirectToHome();
   }
 
-  if (!isAuthRoute && !user) {
+  if (!isAuthRoute && !user && !isVerificationRoute) {
     return redirectToLogin();
   }
 
