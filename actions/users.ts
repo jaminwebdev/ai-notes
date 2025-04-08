@@ -40,7 +40,9 @@ export const signUpAction = async (email: string, password: string) => {
       email,
       password,
       options: {
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}}/login?verify=true`,
+        data: {
+          actual_redirect: `${process.env.NEXT_PUBLIC_BASE_URL}}/login?verify=true`,
+        },
       },
     });
     if (error) throw error;
